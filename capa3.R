@@ -251,4 +251,3 @@ if (i == 1) {
 setwd(ruta_results)
 save(datos, file = file_name)
 save(capa3, file = exit_name)
-
