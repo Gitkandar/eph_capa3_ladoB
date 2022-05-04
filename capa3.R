@@ -1,8 +1,10 @@
+## VER en catoc1 QUE PASA CON CUENTA PROPIA
+## tb falta periodo en union
+
+library(dplyr)
+library(haven)
+
 # RESUMEN ----
-
-
-
-
 
 ### NOTA    
 
@@ -10,6 +12,7 @@
 
 # Ingresos ----
 ingresos <- datos %>%
+  mutate_if(is.labelled, as.numeric) %>% #ver
   group_by(aglomerado) %>%
   summarise(
     
@@ -108,13 +111,13 @@ sexo2 <- datos %>%
   )
 
 # Formalidad ----
-form1 <- datos %>%
+form1 <- datos %>% #ver nombres variables
   group_by(aglomerado) %>% 
   summarise(
-    formal = sum(Formal, na.rm = T),
-    informal = sum(NoFormal, na.rm = T),
-    formal_Part = sum(Formal, na.rm = T)/sum(pondera),
-    informal_Part = sum(NoFormal, na.rm = T)/sum(pondera),
+    formal = sum(formal, na.rm = T),
+    informal = sum(informal, na.rm = T),
+    formal_Part = sum(formal, na.rm = T)/sum(pondera),
+    informal_Part = sum(informal, na.rm = T)/sum(pondera)
   )
 
 form2 <- datos %>%
@@ -125,15 +128,15 @@ form2 <- datos %>%
   )
 
 # Empleo ----
-empleo1 <- datos %>%
+empleo1 <- datos %>% #ver nombres variables
   group_by(aglomerado) %>% 
   summarise(
-    publico = sum(Publico, na.rm = T),
-    privado = sum(Privado, na.rm = T),
-    otro_tipo_empleo = sum(OtroTipo, na.rm = T), 
-    publico_Part = sum(Publico, na.rm = T)/sum(pondera),
-    privado_Part = sum(Privado, na.rm = T)/sum(pondera),
-    otro_tipo_empleo_Part = sum(OtroTipo, na.rm = T)/sum(pondera), 
+    publico = sum(publico, na.rm = T),
+    privado = sum(privado, na.rm = T),
+    otro_tipo_empleo = sum(otro_tipo_empleo, na.rm = T), 
+    publico_Part = sum(publico, na.rm = T)/sum(pondera),
+    privado_Part = sum(privado, na.rm = T)/sum(pondera),
+    otro_tipo_empleo_Part = sum(otro_tipo_empleo, na.rm = T)/sum(pondera)
   )
 
 empleo2 <- datos %>%
@@ -153,7 +156,7 @@ empleo2 <- datos %>%
 educ1 <- datos %>%
   group_by(aglomerado) %>% 
   summarise_at(
-    .vars = vars(ends_with("Completo"), SinInstruccion),
+    .vars = vars(ends_with("Completo"), sin_instruccion),
     .funs = ~sum(., na.rm = TRUE)
   )
 
@@ -161,7 +164,7 @@ educ2 <- datos %>%
   group_by(aglomerado) %>%
   summarise(
     across(
-      .cols = c(ends_with("Completo"), SinInstruccion), 
+      .cols = c(ends_with("Completo"), sin_instruccion), 
       .fns = list(Part = ~sum(., na.rm = TRUE)/sum(pondera)),
       .names = "{col}_{fn}"
     )
@@ -185,11 +188,11 @@ catoc1 <- datos %>%
   group_by(aglomerado) %>% 
   summarise(
     patron = sum(patron, na.rm = T),
-    cta_propia = sum(cta_propia, na.rm = T),
+    cta_propia = sum(cta_propia, na.rm = T), #cuidado
     empleado = sum(empleado, na.rm = T),
     familiar = sum(familiar, na.rm = T),
     patron_Part = sum(patron, na.rm = T)/sum(pondera),
-    cta_propia_Part = sum(cta_propia, na.rm = T)/sum(pondera),
+    cta_propia_Part = sum(cta_propia, na.rm = T)/sum(pondera), #ver
     empleado_Part = sum(empleado, na.rm = T)/sum(pondera),
     familiar_Part = sum(familiar, na.rm = T)/sum(pondera)
   )

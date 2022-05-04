@@ -84,6 +84,8 @@ assign_pond <- function(x) {
 prefijo <- function(vector) {
   case_when(
     # Sexo (var --> "sexo")
+    vector == ".data_Mujer" ~ "mujer",
+    vector == ".data_Hombre" ~ "hombre",
     vector == ".data_Mujeres" ~ "mujer",
     vector == ".data_Varones" ~ "hombre",
     # Nivel educativo (var --> "nivel_educ_obtenido2")
@@ -268,7 +270,7 @@ cruza_ingr <- function(data, x, y) {
     replace(. == 0, NA)
   # Toma la variable de ingreso (x) y la multiplica en columnas [por eso el 2 en apply] por la matriz de dummies
   x1 <- datos %>% 
-    pull({x})
+    pull({x}) %>% as.numeric() #ver
   ingr <- dummies * x1
   # Guarda los nombres de las dummies
   nombre_y <- sufijo(colnames(dummies))

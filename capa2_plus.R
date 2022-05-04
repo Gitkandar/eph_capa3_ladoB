@@ -10,6 +10,9 @@
 ##                3. Se modificaron las funciones para que resuelva el nombrado de nuevas variables de forma automática
 ##                4. Las nuevas variables se crean por loops
                 
+library(dplyr)
+library(readxl)
+library(stringr)
 
 
 # TABLA DE PONDERADORES ####
@@ -21,19 +24,8 @@ ponderados <- read_excel("C:/oes/eph_capa3_ladoB/diccionario/tabla_ponder.xlsx")
 # CONJUNTOS DE VARIABLES ####
 
 ## De Dummies ponderadas ----
-dum <- c("sexo", "nivel_educ_obtenido2", "edad_categoria_intervalo", "tipo_empleo", "condicion_formalidad", "categoria_ocupacional2")
-dum1 <- dum[2:length(dum)]
-dum2 <- dum1[2:length(dum1)]
-dum3 <- dum2[2:length(dum2)]
-dum4 <- dum3[2:length(dum3)]
-dum5 <- dum4[2:length(dum4)]
-
-x1 <- c("sexo")
-x2 <- c("nivel_educ_obtenido2")
-x3 <- c("edad_categoria_intervalo")
-x4 <- c("tipo_empleo")
-x5 <- c("condicion_formalidad")
-x6 <- c("categoria_ocupacional2")
+dum <- c("sexo", "nivel_educ_obtenido2", "edad_categoria_intervalo", 
+         "tipo_empleo", "condicion_formalidad", "categoria_ocupacional2")
 
 ## De Ingresos ----
 ###  Variables a ser cruzadas
@@ -48,37 +40,34 @@ ingr1_c <- dum[1:2]
 ingr2_c <- dum[3:5]
 
 
-
 # PROCESADO ####
 ## Indicador de posición (corte) ----
-corte <- data.frame(matrix(NA, nrow = 1, ncol = 8)) %>%
-          rename(ini_dummies_puras = X1,
-                 fin_dummies_puras = X2,
-                 ini_dummies_cruzadas = X3,
-                 fin_dummies_cruzadas = X4,
-                 ini_ingresos = X5,
-                 fin_ingresos = X6,
-                 ini_ingresos_nolab = X7,
-                 fin_ingresos_nolab = X8)
-
-
-corte$ini_dummies_puras[1] <- length(datos) + 1
+corte <- tibble(
+  ini_dummies_puras = ncol(datos) + 1,
+  fin_dummies_puras = NA,
+  ini_dummies_cruzadas = NA,
+  fin_dummies_cruzadas = NA,
+  ini_ingresos = NA,
+  fin_ingresos = NA,
+  ini_ingresos_nolab = NA,
+  fin_ingresos_nolab = NA
+)
 
 ## Loop para dummies puras ponderadas ---- 
 for (x in dum) { datos <- cruza_var(datos, x)} 
 
-corte$fin_dummies_puras[1] <- length(datos)
-corte$ini_dummies_cruzadas[1] <- length(datos) + 1
+corte$fin_dummies_puras[1] <- ncol(datos)
+corte$ini_dummies_cruzadas[1] <- ncol(datos) + 1
 
 ## Loops para dummies cruzadas ponderadas ----
-for (y in dum1) {datos <- cruza_var(datos, x1, y)}                      
-for (y in dum2) {datos <- cruza_var(datos, x2, y)}
-for (y in dum3) {datos <- cruza_var(datos, x3, y)}
-for (y in dum4) {datos <- cruza_var(datos, x4, y)}
-for (y in dum5) {datos <- cruza_var(datos, x5, y)} 
+for (j in 1:(length(dum) - 1)) {
+  for (y in dum[-(1:j)]) {
+    datos <- cruza_var(datos, dum[j], y)
+  }
+}
 
-corte$fin_dummies_cruzadas[1] <- length(datos)
-corte$ini_ingresos[1] <- length(datos) + 1
+corte$fin_dummies_cruzadas[1] <- ncol(datos)
+corte$ini_ingresos[1] <- ncol(datos) + 1
 
 ## Loop para la totalidad de los ingresos seleccionados ---- 
 for (x in ingr1) {
@@ -87,8 +76,8 @@ for (x in ingr1) {
   }
 } 
 
-corte$fin_ingresos[1] <- length(datos)
-corte$ini_ingresos_nolab[1] <- length(datos) + 1
+corte$fin_ingresos[1] <- ncol(datos)
+corte$ini_ingresos_nolab[1] <- ncol(datos) + 1
 
 ## Loop para la totalidad de los ingresos excluyendo los "no laborales" ----
 for (x in ingr2) {
@@ -97,7 +86,7 @@ for (x in ingr2) {
   }
 }  
 
-corte$fin_ingresos_nolab[1] <- length(datos)
+corte$fin_ingresos_nolab[1] <- ncol(datos)
 
 # ACTUALIZACION DE LA BASE DE PONDERADORES ####
 ponderados <- update_pond(datos, ponderados)
