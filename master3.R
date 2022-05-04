@@ -51,13 +51,5 @@ for (i in 1:nrow(periodo)){
   source("capa2_plus.R", encoding = "UTF-8")
   
   source("test_capa3.R", encoding = "UTF-8")
-  
-  source("funciones TE.R", encoding = "UTF-8")
-  source("tasas y estimadores.R", encoding = "UTF-8")
 
 }
-
-# Guarda el archivo unificado ----
-setwd(ruta_results)
-save(salida, file = "capa3_unificado.RData")
-save(tasasunif, file = "tasas_unificado.RData")
