@@ -42,6 +42,7 @@ for (i in 1:nrow(periodo)){
   ## Archivo para invocar ####
   file_name <- paste0("EPH20",periodo$anio[i],"_T",periodo$trimestre[i],".RData")
   file <- paste0(ruta_data,file_name)
+  exit_name <- paste0("Capa3_20",periodo$anio[i],"_T",periodo$trimestre[i],".RData")
   load(file) 
   
   # Scripts ####
@@ -49,9 +50,14 @@ for (i in 1:nrow(periodo)){
   source("funciones.R", encoding = "UTF-8")
   source("capa2_plus.R", encoding = "UTF-8")
   
-  source("capa3.R", encoding = "UTF-8")
+  source("test_capa3.R", encoding = "UTF-8")
+  
+  source("funciones TE.R", encoding = "UTF-8")
+  source("tasas y estimadores.R", encoding = "UTF-8")
+
 }
 
 # Guarda el archivo unificado ----
 setwd(ruta_results)
 save(salida, file = "capa3_unificado.RData")
+save(tasasunif, file = "tasas_unificado.RData")
