@@ -37,21 +37,21 @@ anio <- c(16,17,17,17,17,18,18,18,18,19,19,19,19,20,20)
 trimestre <- c(4,1,2,3,4,1,2,3,4,1,2,3,4,1,2)
 periodo <- as.data.frame(cbind(anio,trimestre))
 
-## Archivo para invocar ####
-file_name <- paste0("EPH20",periodo$anio[i],"_T",periodo$trimestre[i],".RData")
-
 ## Carga archivo ####
 for (i in 1:nrow(periodo)){
-file <- paste0(ruta_data,file_name)
-load(file) 
-
-# Scripts ####
-setwd(ruta_cod)
-source("funciones.R", encoding = "UTF-8")
-source("capa2_plus.R", encoding = "UTF-8")
-
-source("capa3.R", encoding = "UTF-8")
+  ## Archivo para invocar ####
+  file_name <- paste0("EPH20",periodo$anio[i],"_T",periodo$trimestre[i],".RData")
+  file <- paste0(ruta_data,file_name)
+  load(file) 
+  
+  # Scripts ####
+  setwd(ruta_cod)
+  source("funciones.R", encoding = "UTF-8")
+  source("capa2_plus.R", encoding = "UTF-8")
+  
+  source("capa3.R", encoding = "UTF-8")
 }
 
 # Guarda el archivo unificado ----
+setwd(ruta_results)
 save(salida, file = "capa3_unificado.RData")
