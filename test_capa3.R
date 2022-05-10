@@ -150,7 +150,6 @@ aglom_simple <- function (data, x) {
 
 
 
-
 # Loop para variables ####
 for (i in loop) {capa3 <- aglom_simple(datos, i)} 
 
@@ -159,9 +158,32 @@ for (i in loop) {capa3 <- aglom_simple(datos, i)}
 
 
 
+# Variables excluibles ####
+# Se toma como punto de referencia que los valores en los que el distrito Argentina == 0
+
+
+
+## Dataframe vacio ----
+capa3_excl <- capa3[1:5]
+
+
+
+## Función de exclusión ----
+for (i in loop) {
+  
+  if(capa3[33, i] == 0) {
+    aux <- capa3[i]
+    capa3_excl <- cbind(capa3_excl, aux)
+  }
+  else {next}
+}
+
+
+nombres <- names(capa3_excl)
+
+
 
 ## NOTA: ver si están bien deflacionados todos los ingresos reales
 
-grep("familiar", x)
 
 
