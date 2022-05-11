@@ -164,11 +164,14 @@ for (i in loop) {capa3 <- aglom_simple(datos, i)}
 
 
 ## Dataframe vacio ----
-capa3_excl <- capa3[1:5]
+capa3_excl <- data.frame(matrix(NA, ncol=1, nrow=33))
+capa3_excl <- capa3_excl[-1]
 
 
 
 ## Función de exclusión ----
+
+#### Búsqueda de columnas de 0 ----
 for (i in loop) {
   
   if(capa3[33, i] == 0) {
@@ -178,8 +181,11 @@ for (i in loop) {
   else {next}
 }
 
-
+#### Nombres de esas variables ----
 nombres <- names(capa3_excl)
+
+#### Limpieza ----
+rm(i, j, aux, capa3_excl)
 
 
 
