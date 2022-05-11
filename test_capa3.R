@@ -171,7 +171,7 @@ capa3_excl <- capa3[1:5]
 ## Función de exclusión ----
 for (i in loop) {
   
-  if(capa3[33, i] == 0) {
+  if(capa3[33, i] == 0 | is.nan(capa3[33, i]) ) {
     aux <- capa3[i]
     capa3_excl <- cbind(capa3_excl, aux)
   }

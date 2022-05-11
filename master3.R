@@ -38,16 +38,16 @@ trimestre <- c(4,1,2,3,4,1,2,3,4,1,2,3,4,1,2)
 periodo <- as.data.frame(cbind(anio,trimestre))
 
 ## Carga archivo ####
-for (i in 1:nrow(periodo)){
+for (p in 1:nrow(periodo)){
   ## Archivo para invocar ####
-  file_name <- paste0("EPH20",periodo$anio[i],"_T",periodo$trimestre[i],".RData")
+  file_name <- paste0("EPH20",periodo$anio[p],"_T",periodo$trimestre[p],".RData")
   file <- paste0(ruta_data,file_name)
-  exit_name <- paste0("Capa3_20",periodo$anio[i],"_T",periodo$trimestre[i],".RData")
+  exit_name <- paste0("Capa3_20",periodo$anio[p],"_T",periodo$trimestre[p],".RData")
   load(file) 
   
   # Scripts ####
   setwd(ruta_cod)
-  source("funciones.R", encoding = "UTF-8")
+  source("funciones.R", encoding = "UTF-8")   # este source puede ir fuera de la iteracion
   source("capa2_plus.R", encoding = "UTF-8")
   
   source("test_capa3.R", encoding = "UTF-8")
